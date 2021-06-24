@@ -6,14 +6,14 @@ module.exports = async function(deployer) {
 	await deployer.deploy(Token)
 
 	//assign token into variable to get it's address
-	// const token = await Token.deployed()
+	const token = await Token.deployed()
 	
-	// //pass token address for dBank contract(for future minting)
-	// await deployer.deploy(dBank, token.address)
+	//pass token address for dBank contract(for future minting)
+	await deployer.deploy(dBank, token.address)
 
-	// //assign dBank contract into variable to get it's address
-	// const dbank = await dBank.deployed()
+	//assign dBank contract into variable to get it's address
+	const dbank = await dBank.deployed()
 
-	// //change token's owner/minter from deployer to dBank
-	// await token.passMinterRole(dbank.address)nt
+	//change token's owner/minter from deployer to dBank
+	await token.passMinterRole(dbank.address)
 };

@@ -12,7 +12,7 @@ contract Token is ERC20 {
     minter = msg.sender;
   }
 
-  function  passMinterRole(address dbank) public returns (bool) {
+  function passMinterRole(address dbank) public returns (bool) {
     require(msg.sender == minter, 'Error Not owner');
     minter = dbank;
 
