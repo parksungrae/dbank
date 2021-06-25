@@ -12,6 +12,7 @@ class App extends Component {
     await this.loadBlockchainData(this.props.dispatch)
   }
 
+  //블록체인의 데이터를 가져오는 함수
   async loadBlockchainData(dispatch) {
     if(typeof window.ethereum!=='undefined'){
       const web3 = new Web3(window.ethereum)
@@ -86,7 +87,7 @@ class App extends Component {
       }
     }
   }
-
+  //실행 시 함수 선언 및 기본 설정
   constructor(props) {
     super(props)
     this.state = {

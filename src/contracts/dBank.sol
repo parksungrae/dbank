@@ -22,8 +22,9 @@ contract dBank {
   constructor(Token _token) public {
     token = _token;
   }
-
+  // ETH를 예치하는 함수
   function deposit() payable public {
+    //require문을 통해 이미 Deposit되있는지, 값이 0.01ETH이상인지 확인
     require(isDeposited[msg.sender] == false, 'Error, deposit already active');
     require(msg.value>=1e16, 'Error, deposit must be >= 0.01 ETH');
 
@@ -33,12 +34,13 @@ contract dBank {
     isDeposited[msg.sender] = true; //activate deposit status
     emit Deposit(msg.sender, msg.value, block.timestamp);
   }
-
+  // Deposit된 eth를 출금하는 함수 시간에 따른 interes(이자)도 준다.
   function withdraw() public {
     require(isDeposited[msg.sender]==true, 'Error, no previous deposit');
     uint userBalance = etherBalanceOf[msg.sender]; //for event
 
     //check user's hodl time
+    //시간 계산
     uint depositTime = block.timestamp - depositStart[msg.sender];
 
     //31668017 - interest(10% APY) per second for min.  deposit amount (0.01 ETH), cuz:
@@ -61,15 +63,17 @@ contract dBank {
 
     emit Withdraw(msg.sender, userBalance, depositTime, interest);
   }
-
+  //0.01eth 이상의 ETH를 예치하고 token을 만들어 주는 함수 collateral(담보로 내놓은)
   function borrow() payable public {
     require(msg.value>=1e16, 'Error, collateral must be >= 0.01 ETH');
     require(isBorrowed[msg.sender] == false, 'Error, loan already taken');
 
     //this Ether will be locked till user payOff the loan
+    //이더를 담보로 맡김
     collateralEther[msg.sender] = collateralEther[msg.sender] + msg.value;
 
     //calc tokens amount to mint, 50% of msg.value
+    //token은 eth의 50%만큼 얻을 수 있음
     uint tokensToMint = collateralEther[msg.sender] / 2;
 
     //mint&send tokens to user
